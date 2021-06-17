@@ -11,7 +11,11 @@ using namespace std;
 class Admin
 {
 	string name;
+	string username;
+	string password;
 public:
+	Admin() :name(""), username(""), password("") {}
+
 
 };
 
