@@ -1,5 +1,6 @@
 #include "Passenger.h"
-bool IsCnicValid(long long& cnic)
+int passenger_count = 10;
+void IsCnicValid(long long& cnic)
 {
 	// should be of 13 charadcters
 	// finding length
@@ -22,43 +23,47 @@ void Passenger::generateData(Passenger* passenger_ptr)
 		passenger_ptr[i].passenger_password = "Password" + to_string(i + 1);
 	}
 }
-bool DoesCnicAlreadyExist(Passenger* passenger_ptr, long long cnic)
+void DoesCnicAlreadyExist(Passenger* passenger_ptr, long long& cnic)
 {
-	bool found(0);
-	for (auto i = 0; i < 10; i++)
+
+	for (auto i = 0; i < passenger_count; i++)
 	{
 		if (passenger_ptr[i].getCNIC() == cnic)
 		{
-			found = 1;
-			return found;
+			cout << "CNIC already exists, Re-enter "; cin >> cnic;
+			DoesCnicAlreadyExist(passenger_ptr, cnic);
 		}
 	}
-	return 0;
+
+
 }
 void Passenger::Passenger_registration(Passenger* passenger_ptr)
 {
+	passenger_count++;
+	Passenger passenger;
 	LOG("Please Enter your CNIC "); cin >> CNIC;
 	IsCnicValid(CNIC);
-	bool doesCnicExist = DoesCnicAlreadyExist(passenger_ptr, CNIC);
+	DoesCnicAlreadyExist(passenger_ptr, CNIC);
+
 	LOG("Please enter your name ");
-	cin.ignore(); getline(cin, name);
+	cin.ignore(); getline(cin, passenger.name);
 
 	lineEnd();
 	LOG("Pick a Username:"); lineEnd();
-	cin.ignore(); getline(cin, passenger_username);
+	cin.ignore(); getline(cin, passenger.passenger_username);
 	lineEnd();
 	LOG("Pick a Password:"); lineEnd();
-	cin.ignore(); getline(cin, passenger_password);
+	cin.ignore(); getline(cin, passenger.passenger_password);
 
 	string passTemp("");
 	lineEnd();
 	LOG("Re-Type password to confirm:"); lineEnd();
 	cin.ignore(); getline(cin, passTemp);
-	while (passTemp != passenger_password)
+	while (passTemp != passenger.passenger_password)
 	{
 		LOG("Password didn't match re-enter:"); lineEnd();
 		cin.ignore(); getline(cin, passTemp);
 	}
 
-
+	passenger_ptr[passenger_count + 1] = passenger;
 }

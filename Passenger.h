@@ -7,6 +7,8 @@ using namespace std;
 #define LOG(x) cout << x << " "
 #define lineEnd() cout << endl
 
+
+
 class Passenger
 {
 	string name;
