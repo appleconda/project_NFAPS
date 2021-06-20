@@ -39,6 +39,34 @@ struct tm* GetTimeAndDate()
 	return localtime(&rand_time);
 }
 
+string structTmToSTring(struct tm* ptr)
+{
+	string str1 = asctime(ptr);
+	string strDay = ""; string strMonth; string strDate;
+	for (auto i = 0; i < 3; i++)
+	{
+		strDay += str1[i];
+	}
+	for (auto i = 4; i < 7; i++)
+	{
+		strMonth += str1[i];
+	}
+	for (auto i = 8; i < 10; i++)
+	{
+		strDate += str1[i];
+	}
+	string str = strDay + " " + strMonth + " " + strDate + " " + to_string(ptr->tm_hour) + ":" + to_string(ptr->tm_min) + ":" + to_string(ptr->tm_sec);
+	return str;
+}
+
+string AddandConvert(struct tm* ptr, int duration)
+{
+	ptr->tm_hour += duration;
+	mktime(ptr);
+	string str = structTmToSTring(ptr);
+	return str;
+}
+
 void FlightSchedule::FlightScheduleSetter(FlightSchedule* flights, string Airport_name)
 {
 	srand((unsigned int)time(NULL));
@@ -59,21 +87,34 @@ void FlightSchedule::FlightScheduleSetter(FlightSchedule* flights, string Airpor
 		struct tm* ptr = GetTimeAndDate();
 		flights[i].DepartureTime = ptr;
 		flights[i].DateTimeOfFlight = asctime(ptr);
+		flights[i].Departure_Time = structTmToSTring(ptr);
 
 		int random = (rand() % 500) + 100;
 		flights[i].Distance = random;
 		flights[i].duration = random / 100;
+		flights[i].Arrival_Time = AddandConvert(ptr, flights[i].duration);
+		random = (rand() % 999) + 100;
+		string name1 = "PK-" + to_string(random);
+		flights[i].getAirplane().setName(name1);
 
 	}
 	for (auto i = 10; i < 15; i++) // for international flights
 	{
+		int random(0);
 		RandomIndex = rand() % 25;
 		flights[i].AirportName = countries[RandomIndex];
 		struct tm* ptr = GetTimeAndDate();
 		flights[i].DepartureTime = ptr;
 		flights[i].DateTimeOfFlight = asctime(ptr);
+		flights[i].Departure_Time = structTmToSTring(ptr);
 		flights[i].Distance = countriesDistance[RandomIndex];
 		flights[i].duration = TimeTaken[RandomIndex];
+		flights[i].Arrival_Time = AddandConvert(ptr, flights[i].duration);
+
+		random = (rand() % 999) + 100;
+		string name1 = "PK-" + to_string(random);
+		flights[i].getAirplane().setName(name1);
+
 	}
 }
 
@@ -101,10 +142,7 @@ void city::generateDataForLocal(city* city_ptr_Local)
 		for (auto j = 0; j < 2; j++)
 		{
 			flights = city_ptr_Local[i].airport[j].getFlightSchedule();
-			for (auto k = 0; k < 15; k++)
-			{
-				flight.FlightScheduleSetter(flights, city_ptr_Local[i].airport[j].getName());
-			}
+			flight.FlightScheduleSetter(flights, city_ptr_Local[i].airport[j].getName());
 		}
 	}
 
@@ -114,33 +152,29 @@ void city::PrintAllFlightSchedule(city* city_ptr)
 {
 	for (auto i = 0; i < 5; i++)
 	{
-		cout << "-------------" << city_ptr[i].name << "-----------------" << endl;
-
-		for (auto l = 0; l < 2; l++)
+		for (auto j = 0; j < 2; j++)
 		{
-
-			if (l == 0)
-			{
-				cout << left << setw(30) << setfill(' ') << "*****Ariport # 1******"
-					<< left << setw(30) << setfill(' ') << city_ptr[i].airport[l].getName() << endl;
-			}
-			else
-			{
-				cout << left << setw(30) << setfill(' ') << "******Ariport # 2******"
-					<< left << setw(30) << setfill(' ') << city_ptr[i].airport[l].getName() << endl;
-			}
-
-			cout << endl << "**Printing the Flight Schedule**" << endl << endl;
-			cout << left << setw(30) << setfill(' ') << "Arrival City"
-				<< left << setw(30) << setfill(' ') << "Date And time Specifications" << endl;
+			cout << "---------------------------------------------------" << endl;
+			cout << "Airport " << city_ptr[i].airport[j].getName() << endl;
+			cout << "---------------------------------------------------" << endl;
+			cout << left << setw(20) << "Flight #"
+				<< left << setw(20) << "Flying To"
+				<< left << setw(30) << "Departure Time"
+				<< left << setw(30) << "Duration in Hours"
+				<< left << setw(40) << "Arrival Time";
+			cout << endl;
 			for (auto k = 0; k < 15; k++)
 			{
-				cout << left << setw(30) << setfill(' ') << city_ptr[i].airport[l].getFlightSchedule()[k].getCityName()
-					<< left << setw(30) << setfill(' ') << city_ptr[i].airport[l].getFlightSchedule()[k].getDateTime() << endl;
+				cout << left << setw(20) << city_ptr[i].airport[j].getFlightSchedule()[k].getAirplane().getName()
+					<< left << setw(20) << city_ptr[i].airport[j].getFlightSchedule()[k].getCityName()
+					<< left << setw(30) << city_ptr[i].airport[j].getFlightSchedule()[k].getDeparture_time()
+					<< left << setw(30) << city_ptr[i].airport[j].getFlightSchedule()[k].getDuration()
+					<< left << setw(40) << city_ptr[i].airport[j].getFlightSchedule()[k].getArrival_time();
+				cout << endl;
+
 			}
 		}
 	}
-
 }
 
 

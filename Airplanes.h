@@ -14,6 +14,7 @@ public:
 	Airplanes() : name(""), isLocal(0), availSeats(0) {}
 	void setAvailSeats(int x) { availSeats = x; }
 	int getAvailSeats() { return availSeats; }
-
+	void setName(string x) { name = x; }
+	string getName() { return name; }
 };
 
