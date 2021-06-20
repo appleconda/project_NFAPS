@@ -140,11 +140,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
+    <ClCompile Include="Airplanes.cpp" />
+    <ClCompile Include="Airport.cpp" />
+    <ClCompile Include="city.cpp" />
+    <ClCompile Include="FlightSchedule.cpp" />
     <ClCompile Include="Passenger.cpp" />
     <ClCompile Include="project_NFAPS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Admin.h" />
+    <ClInclude Include="Airplanes.h" />
+    <ClInclude Include="Airport.h" />
+    <ClInclude Include="city.h" />
+    <ClInclude Include="FlightSchedule.h" />
     <ClInclude Include="Passenger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
