@@ -1,14 +1,14 @@
 #pragma once
 #include <iostream>
 #include <string>
-
+#include "city.h"
 using namespace std;
 
 #define LOG(x) cout << x << " "
 #define lineEnd() cout << endl
 
 
-class Admin
+class Admin : public city
 {
 	string name;
 	string username;

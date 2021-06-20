@@ -21,9 +21,8 @@ public:
 	~city() { delete[] airport; }
 
 	void generateDataForLocal(city*);
-
-
 	void PrintAllFlightSchedule(city*);
-
+	void PrintOnlyOneCitySchedule(city*, int, int);
+	void UpdateInformation(city*);
 };
 

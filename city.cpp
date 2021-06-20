@@ -183,4 +183,98 @@ void city::PrintAllFlightSchedule(city* city_ptr)
 
 }
 
+void city::PrintOnlyOneCitySchedule(city* city_ptr, int i, int j)
+{
+	cout << left << setw(10) << "Choice";
+	cout << left << setw(10) << "Flight #"
+		<< left << setw(20) << "Flying To"
+		<< left << setw(30) << "Departure Time"
+		<< left << setw(30) << "Duration in Hours"
+		<< left << setw(40) << "Arrival Time"
+		<< left << setw(0) << "Avail Seats" << endl;
+	for (auto k = 0; k < 15; k++)
+	{
+		cout << left << setw(10) << k + 1;
+		cout << left << setw(10) << city_ptr[i].airport[j].getFlightSchedule()[k].getFlightName()
+			<< left << setw(20) << city_ptr[i].airport[j].getFlightSchedule()[k].getCityName()
+			<< left << setw(30) << city_ptr[i].airport[j].getFlightSchedule()[k].getDeparture_time()
+			<< left << setw(30) << city_ptr[i].airport[j].getFlightSchedule()[k].getDuration()
+			<< left << setw(40) << city_ptr[i].airport[j].getFlightSchedule()[k].getArrival_time()
+			<< left << setw(40) << city_ptr[i].airport[j].getFlightSchedule()[k].getAvailSeats();
+		cout << endl;
 
+	}
+}
+
+void city::UpdateInformation(city* city_ptr)
+{
+	// here you can change two things timings of flights and theri available seats
+	cout << "Please Tell which Airport's FlightSchedule you want to change" << endl;
+	cout << left << setw(20) << "Choice"
+		<< left << setw(20) << "Airport Name" << endl;
+
+	for (auto i = 0; i < 10; i++)
+	{
+		cout << left << setw(20) << i + 1
+			<< left << setw(20) << AirportNames[i] << endl;
+	}
+	cout << endl;
+	cout << "Enter Your chocie "; int choice(0); cin >> choice;
+	int cityIndex(0); int airportIndex(0);
+	for (auto i = 0; i < 5; i++)
+	{
+		for (auto k = 0; k < 2; k++)
+		{
+			if (city_ptr[i].airport[k].getName() == AirportNames[choice - 1])
+			{
+				cityIndex = i; airportIndex = k;
+			}
+		}
+	}
+	cout << endl;
+	PrintOnlyOneCitySchedule(city_ptr, cityIndex, airportIndex);
+	cout << endl;
+	cout << "Please Enter which flights data you want to change "; int choice1(0); cin >> choice1;
+	cout << endl;
+	cout << "Please enter the new Available seats "; int AvailSeats(0); cin >> AvailSeats;
+	cout << endl;
+	city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice1 - 1].setAvailSeats(AvailSeats);
+
+	cout << "Do you Wish to add hrs into the departure time or remove hours from departure time?"
+		<< "\n Press A for adding, and R for removing ";
+	char x('0'); cin.ignore(); cin >> x;
+	switch (x)
+	{
+	case 'A':
+	{
+		cout << endl;
+		cout << "Please enter hours you want to add to this flight "; int hrs; cin >> hrs;
+		struct tm* ptr = city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice].getDepartureTimeTm();
+		ptr->tm_hour += hrs;
+		mktime(ptr);
+		string str = structTmToSTring(ptr);
+		city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice1 - 1].setDeparture_Time(str);
+		str = AddandConvert(ptr, city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice1].getDuration());
+		city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice1 - 1].setArrival_Tiem(str);
+		break; }
+	case 'R':
+	{
+		cout << endl;
+		cout << "Please enter hours you want to remove from departure Time"; int hrs; cin >> hrs;
+		struct tm* ptr = city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice].getDepartureTimeTm();
+		ptr->tm_hour -= hrs;
+		mktime(ptr);
+		string str = structTmToSTring(ptr);
+		city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice1 - 1].setDeparture_Time(str);
+		str = AddandConvert(ptr, city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice1].getDuration());
+		city_ptr[cityIndex].airport[airportIndex].getFlightSchedule()[choice1 - 1].setArrival_Tiem(str);
+
+		break; }
+	default:
+		break;
+	}
+
+	cout << "Changes have been sucessfully implemented " << endl;
+	PrintOnlyOneCitySchedule(city_ptr, cityIndex, airportIndex);
+
+}

@@ -30,18 +30,29 @@ public:
 		duration(0), AirportName(""), DateTimeOfFlight(""),
 		Distance(0), AvailSeats() {}
 
-	//void setNumberOfHours(int x) { numberofHours = x; }
-	//int getNumberofHours() { return numberofHours; }
 
-	//void setDuratation(double x) { duration = x; }
+	void setDuratation(double x) { duration = x; }
 	int getDuration() { return duration; }
+
 	string getFlightName() { return FlightName; }
+
 	void setCityName(string x) { AirportName = x; }
 	string getCityName() { return AirportName; }
+
 	void FlightScheduleSetter(FlightSchedule*, string);
+
 	string getDateTime() { return DateTimeOfFlight; }
+
 	string getDeparture_time() { return Departure_Time; }
 	string getArrival_time() { return Arrival_Time; }
+
+	void setDeparture_Time(string x) { Departure_Time = x; }
+	void setArrival_Tiem(string x) { Arrival_Time = x; }
+
 	int getAvailSeats() { return AvailSeats; }
+	void setAvailSeats(int x) { AvailSeats = x; }
+
+	struct tm* getArrivalTimeTm() { return arrivalTime; }
+	struct tm* getDepartureTimeTm() { return DepartureTime; }
 };
 

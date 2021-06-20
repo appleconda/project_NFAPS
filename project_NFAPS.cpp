@@ -20,6 +20,9 @@ int main()
 	cities.generateDataForLocal(city_ptr);
 	cities.PrintAllFlightSchedule(city_ptr);
 
+	cout << endl;
+	cout << endl;
+	cities.UpdateInformation(city_ptr);
 
 
 
