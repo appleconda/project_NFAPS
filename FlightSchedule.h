@@ -24,7 +24,7 @@ class FlightSchedule
 
 	int duration;
 	int AvailSeats;
-	double price;
+	int price;
 public:
 	FlightSchedule() : isLocal(1), arrivalTime(0), DepartureTime(0),
 		FlightName(""), Departure_Time(""), Arrival_Time(""),
@@ -56,5 +56,8 @@ public:
 
 	struct tm* getArrivalTimeTm() { return arrivalTime; }
 	struct tm* getDepartureTimeTm() { return DepartureTime; }
+
+	int getPrice() { return price; }
+	void AvailSeatsDecrement() { AvailSeats--; }
 };
 

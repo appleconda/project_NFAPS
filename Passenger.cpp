@@ -116,7 +116,7 @@ void PasswordValidity(string& password)
 	if (found_Numberic == 0 || found_SpecialChar == 0 || found_UpperCase == 0 || found_LowerCase == 0)
 	{
 		cout << "Please include all Numeric, Special char, UpperCase and LowerCase" << endl;
-		cin.ignore(); getline(cin, password);
+		getline(cin, password);
 		PasswordValidity(password);
 	}
 
@@ -130,11 +130,13 @@ void Passenger::Passenger_registration(Passenger* passenger_ptr, int& passenger_
 	DoesCnicAlreadyExist(passenger_ptr, CNIC, passenger_count);
 
 	LOG("Please enter your name ");
-	cin.ignore(); getline(cin, passenger.name);
+	std::cin.ignore(1000, '\n');
+	getline(cin, passenger.name);
 
 	lineEnd();
 	LOG("Pick a Username:"); lineEnd();
-	cin.ignore(); getline(cin, passenger.passenger_username);
+
+	getline(cin, passenger.passenger_username);
 	lineEnd();
 	LOG("Pick a Password:"); lineEnd();
 	string password("");
@@ -144,7 +146,8 @@ void Passenger::Passenger_registration(Passenger* passenger_ptr, int& passenger_
 	string passTemp("");
 	lineEnd();
 	LOG("Re-Type password to confirm:"); lineEnd();
-	cin.ignore(); getline(cin, passTemp);
+
+	getline(cin, passTemp);
 	if (passTemp.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS!£$%&*1234567890") != std::string::npos)
 	{
 		std::cerr << "Error\n";
@@ -152,7 +155,8 @@ void Passenger::Passenger_registration(Passenger* passenger_ptr, int& passenger_
 	while (passTemp != passenger.passenger_password)
 	{
 		cout << ("Password didn't match re-enter:"); lineEnd();
-		cin.ignore(); getline(cin, passTemp);
+		std::cin.ignore(1000, '\n');
+		getline(cin, passTemp);
 	}
 
 	passenger_ptr[passenger_count] = passenger;
@@ -228,8 +232,10 @@ void Passenger::PassengerBooking(city* city_ptr)
 		{
 			if (VisaStatus == 1)
 			{
+				city_ptr[cityIndex].getAirport()[airportIndex].getFlightSchedule()[choice1 - 1].AvailSeatsDecrement();
 				flights.push_back(city_ptr[cityIndex].getAirport()[airportIndex].getFlightSchedule()[choice1 - 1]);
 				howManyflightsBooked++;
+
 				cout << "Do you wish to pick other flight? Y/N? "; cin >> Charchoice;
 			}
 			else
@@ -240,6 +246,7 @@ void Passenger::PassengerBooking(city* city_ptr)
 		}
 		else
 		{
+			city_ptr[cityIndex].getAirport()[airportIndex].getFlightSchedule()[choice1 - 1].AvailSeatsDecrement();
 			flights.push_back(city_ptr[cityIndex].getAirport()[airportIndex].getFlightSchedule()[choice1 - 1]);
 			howManyflightsBooked++;
 			cout << "Do you wish to pick other flight? Y/N? "; cin >> Charchoice;
@@ -260,7 +267,7 @@ void Passenger::PassengerLogIn(city* city_ptr, Passenger* passenger_ptr, int Pas
 	auto i = 0;
 	do
 	{
-		cout << "Enter your Username ";  cin.ignore(); getline(cin, userName);
+		cout << "Enter your Username ";  std::cin.ignore(1000, '\n'); getline(cin, userName);
 		for (i = 0; i < Passenger_count + 1; i++)
 		{
 			if (userName == passenger_ptr[i].passenger_username)
@@ -284,39 +291,117 @@ void Passenger::PassengerLogIn(city* city_ptr, Passenger* passenger_ptr, int Pas
 			cout << "No Such Username Exist try again" << endl;
 	} while (accessGranted == 0);
 
-	cout << "------------------------------" << endl;
-	cout << left << setw(20) << "|Choice|"
-		<< left << setw(20) << "|Options|" << endl;
-	cout << left << setw(20) << "1"
-		<< left << setw(20) << "Book a Flight" << endl;
-	cout << left << setw(20) << "2"
-		<< left << setw(20) << "View your Booked Flights" << endl;
-	cout << left << setw(20) << "3"
-		<< left << setw(20) << "Delete a booked Flight" << endl;
-	cout << left << setw(20) << "4"
-		<< left << setw(20) << "View Total Number of Flights booked" << endl;
-	cout << "------------------------------" << endl;
-	cout << "Enter Your choice "; int choice(0); cin >> choice;
-	int choice1(0);
-	switch (choice)
+	int goAgain(0);
+	char goAgain1(0);
+	int x = passenger_ptr[i].howManyflightsBooked;
+	int sum(0);
+
+	do
 	{
-	case 1:
-		passenger_ptr[i].PassengerBooking(city_ptr);
-		break;
-	case 2:
-		passenger_ptr[i].PrintFlightSchedule();
-		break;
-	case 3:
-		passenger_ptr[i].PrintFlightSchedule();
-		cout << endl << "Enter your choice ";  cin >> choice1;
-		passenger_ptr[i].flights.erase(flights.begin() + choice1);
-		cout << "Successful Deletion" << endl;
-		passenger_ptr[i].PrintFlightSchedule();
-		break;
-	case 4:
-		cout << "Total Number of flights booked are " << passenger_ptr[i].howManyflightsBooked << endl;
-		break;
-	default:
-		break;
-	}
+		cout << "------------------------------" << endl;
+		cout << left << setw(20) << "|Choice|"
+			<< left << setw(20) << "|Options|" << endl;
+		cout << left << setw(20) << "1"
+			<< left << setw(20) << "Book a Flight" << endl;
+		cout << left << setw(20) << "2"
+			<< left << setw(20) << "View your Booked Flights" << endl;
+		cout << left << setw(20) << "3"
+			<< left << setw(20) << "Delete a booked Flight" << endl;
+		cout << left << setw(20) << "4"
+			<< left << setw(20) << "View Total Number of Flights booked" << endl;
+		cout << left << setw(20) << "5"
+			<< left << setw(20) << "Display Payment amount" << endl;
+
+		cout << "------------------------------" << endl;
+		cout << "Enter Your choice "; int choice(0); cin >> choice;
+		int choice1(0);
+		switch (choice)
+		{
+		case 1:
+			passenger_ptr[i].PassengerBooking(city_ptr);
+			cout << endl;
+			cout << "Do you want to go again? Y / N? ";
+			cin >> goAgain1;
+			if (goAgain1 == 'Y')
+			{
+				goAgain = 1;
+			}
+			else
+			{
+				goAgain = 0;
+			}
+			break;
+		case 2:
+			passenger_ptr[i].PrintFlightSchedule();
+			cout << endl;
+			cout << "Do you want to go again? Y / N? ";
+			cin >> goAgain1;
+			if (goAgain1 == 'Y')
+			{
+				goAgain = 1;
+			}
+			else
+			{
+				goAgain = 0;
+			}
+
+			break;
+		case 3:
+			passenger_ptr[i].PrintFlightSchedule();
+			cout << endl << "Enter your choice ";  cin >> choice1;
+			passenger_ptr[i].flights.erase(flights.begin() + choice1);
+			cout << "Successful Deletion" << endl;
+			passenger_ptr[i].PrintFlightSchedule();
+			cout << endl;
+			cout << "Do you want to go again? Y / N? ";
+			cin >> goAgain1;
+			if (goAgain1 == 'Y')
+			{
+				goAgain = 1;
+			}
+			else
+			{
+				goAgain = 0;
+			}
+
+			break;
+		case 4:
+			cout << "Total Number of flights booked are " << passenger_ptr[i].howManyflightsBooked << endl;
+			cout << endl;
+			cout << "Do you want to go again? Y / N? ";
+			cin >> goAgain1;
+			if (goAgain1 == 'Y')
+			{
+				goAgain = 1;
+			}
+			else
+			{
+				goAgain = 0;
+			}
+
+			break;
+		case 5:
+			for (auto j = 0; j < x; j++)
+			{
+				sum += passenger_ptr[i].flights[j].getPrice();
+			}
+			if (passenger_ptr[i].howManyflightsBooked > 6)
+			{
+				sum -= (sum * 0.15);
+			}
+			cout << "Total Payment is " << sum << endl;
+			if (goAgain1 == 'Y')
+			{
+				goAgain = 1;
+			}
+			else
+			{
+				goAgain = 0;
+			}
+
+
+		default:
+			break;
+		}
+	} while (goAgain == 1);
 }

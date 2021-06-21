@@ -29,15 +29,16 @@ int main()
 	cout << " New-PAK Airline Flight System (NPAFS)" << endl;
 	cout << "---------------------------------------" << endl;
 	cout << "Would you like to countinue to as a Passenger or Admin? Enter P or A ";
-	char PassengerOrAdmin; cin >> PassengerOrAdmin;
-	string Username(""); string Password("");
+	char PassengerOrAdmin;
+	cin >> PassengerOrAdmin;
+	string Username("");
+	string Password("");
 	bool found(0);
 
 	if (PassengerOrAdmin == 'P' || PassengerOrAdmin == 'p')
 	{
 	jump:
 		cout << endl;
-		cout << passenger_ptr[10].getCNIC() << endl;
 		cout << "------------------------------" << endl;
 		cout << left << setw(20) << "|Choice|"
 			<< left << setw(20) << "|Options|" << endl;
@@ -45,6 +46,9 @@ int main()
 			<< left << setw(20) << "Log In" << endl;
 		cout << left << setw(20) << "2"
 			<< left << setw(20) << "Register" << endl;
+		cout << left << setw(20) << "3"
+			<< left << setw(20) << "View Schedule of all flights" << endl;
+
 		cout << "------------------------------" << endl;
 		cout << "Enter your choice "; int menuChoice(0); cin >> menuChoice;
 		switch (menuChoice)
@@ -57,6 +61,9 @@ int main()
 			cout << "Registration successfull" << endl;
 			goto jump;
 			break;
+		case 3:
+			cities.PrintAllFlightSchedule(city_ptr);
+			break;
 		default:
 			break;
 		}
@@ -65,11 +72,14 @@ int main()
 	{
 		do
 		{
-			cout << "Enter your username "; cin.ignore(1000, '\n'); getline(cin, Username);
+			cout << "Enter your username ";
+			cin.ignore(1000, '\n');
+			getline(cin, Username);
 			cout << endl;
 			cout << "Enter your Password ";
-			cin.ignore(1000, '\n');
+			//cin.ignore(1000, '\n');
 			getline(cin, Password);
+			cout << endl;
 			found = admin.AdminVerification(admin_ptr, Username, Password);
 		} while (found == 0);
 
