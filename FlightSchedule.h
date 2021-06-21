@@ -9,7 +9,7 @@
 using namespace std;
 class FlightSchedule
 {
-	int numberofHours;
+	bool isLocal;
 	string AirportName; // holds the name of the airport you are travelling to e.g., Lahore North
 	string FlightName;
 	double Distance;
@@ -24,12 +24,14 @@ class FlightSchedule
 
 	int duration;
 	int AvailSeats;
+	double price;
 public:
-	FlightSchedule() : numberofHours(0), arrivalTime(0), DepartureTime(0),
+	FlightSchedule() : isLocal(1), arrivalTime(0), DepartureTime(0),
 		FlightName(""), Departure_Time(""), Arrival_Time(""),
 		duration(0), AirportName(""), DateTimeOfFlight(""),
-		Distance(0), AvailSeats() {}
+		Distance(0), AvailSeats(), price(0) {}
 
+	bool getisLocal() { return isLocal; }
 
 	void setDuratation(double x) { duration = x; }
 	int getDuration() { return duration; }

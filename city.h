@@ -8,6 +8,7 @@
 
 
 
+
 using namespace std;
 
 class city
@@ -20,9 +21,10 @@ public:
 
 	~city() { delete[] airport; }
 
+	Airport* getAirport() { return airport; }
 	void generateDataForLocal(city*);
 	void PrintAllFlightSchedule(city*);
 	void PrintOnlyOneCitySchedule(city*, int, int);
-	void UpdateInformation(city*);
+	void UpdateInformation(city*); // When Admin makes changes this function allows that
 };
 

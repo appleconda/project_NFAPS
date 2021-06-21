@@ -8,7 +8,7 @@ string countries[] = { "Afghanistan", "United States", "United Kingdom", "China"
 						"Kenya", "Mexico", "Morocco", "Nepal", "Netherlands", "North Korea", "Japan"
 						, "Norway", "New Zealand" };
 double countriesDistance[] = { 425, 12352, 6211.02, 3284.45, 1452.78, 1501.93, 3236.92, 8362.39,9235.43,
-								2246.35, 2205.71,1896.81, 10386.92, 14578.76, 15348.86, 3160.86, 4738.8,
+								2246.35, 2205.71, 1896.81, 10386.92, 14578.76, 15348.86, 3160.86, 4738.8,
 								13946.9, 7116.22, 1447.59, 5657.79, 5293.61, 6303.07, 5524.98,1338.45 };
 double TimeTaken[] = { .47, 13.54, 6.81, 3.6, 1.59, 1.65, 3.55, 9.17, 10.12, 2.46, 2.42, 2.08,
 							11.38, 15.98, 16.82, 3.46, 5.19, 15.28, 7.8, 1.59, 6.2, 5.8, 6.91, 6.05, 14.67 };
@@ -97,6 +97,8 @@ void FlightSchedule::FlightScheduleSetter(FlightSchedule* flights, string Airpor
 		string name1 = "PK-" + to_string(random);
 		flights[i].FlightName = name1;
 		flights[i].AvailSeats = 20;
+		random = (rand() % 50) + 40;
+		flights[i].price = flights[i].duration * 10000;
 
 	}
 	for (auto i = 10; i < 15; i++) // for international flights
@@ -111,6 +113,8 @@ void FlightSchedule::FlightScheduleSetter(FlightSchedule* flights, string Airpor
 		flights[i].Distance = countriesDistance[RandomIndex];
 		flights[i].duration = TimeTaken[RandomIndex];
 		flights[i].Arrival_Time = AddandConvert(ptr, flights[i].duration);
+		flights[i].isLocal = 0;
+		flights[i].price = flights[i].duration * 20000;
 
 		random = (rand() % 999) + 100;
 		string name1 = "PK-" + to_string(random);
@@ -200,7 +204,7 @@ void city::PrintOnlyOneCitySchedule(city* city_ptr, int i, int j)
 			<< left << setw(30) << city_ptr[i].airport[j].getFlightSchedule()[k].getDeparture_time()
 			<< left << setw(30) << city_ptr[i].airport[j].getFlightSchedule()[k].getDuration()
 			<< left << setw(40) << city_ptr[i].airport[j].getFlightSchedule()[k].getArrival_time()
-			<< left << setw(40) << city_ptr[i].airport[j].getFlightSchedule()[k].getAvailSeats();
+			<< left << setw(0) << city_ptr[i].airport[j].getFlightSchedule()[k].getAvailSeats();
 		cout << endl;
 
 	}

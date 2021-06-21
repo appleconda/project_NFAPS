@@ -1,4 +1,5 @@
 #include "Passenger.h"
+
 int passenger_count = 10;
 void IsCnicValid(long long& cnic)
 {
@@ -12,8 +13,10 @@ void IsCnicValid(long long& cnic)
 		cin >> cnic;
 	}
 }
-void Passenger::generateData(Passenger* passenger_ptr)
+void Passenger::generateData(Passenger* passenger_ptr, city* city_ptr)
 {
+	srand(time(0));
+	int randomCityIndex(0), randomAirportIndex(0), randomFlightSchedule(0);
 	long long cnic = 8130275782227;
 	for (auto i = 0; i < 10; i++)
 	{
@@ -21,6 +24,13 @@ void Passenger::generateData(Passenger* passenger_ptr)
 		passenger_ptr[i].CNIC = cnic + i;
 		passenger_ptr[i].passenger_username = "Username # " + to_string(i + 1);
 		passenger_ptr[i].passenger_password = "Password" + to_string(i + 1);
+		for (auto k = 0; k < 5; k++)
+		{
+			randomCityIndex = rand() % 5;
+			randomAirportIndex = rand() % 15;
+			randomFlightSchedule = rand() % 1;
+			passenger_ptr[i].flights[k] = city_ptr[randomCityIndex].getAirport()[randomAirportIndex].getFlightSchedule()[randomFlightSchedule];
+		}
 	}
 }
 void DoesCnicAlreadyExist(Passenger* passenger_ptr, long long& cnic)
@@ -145,4 +155,70 @@ void Passenger::Passenger_registration(Passenger* passenger_ptr)
 	}
 
 	passenger_ptr[passenger_count + 1] = passenger;
+}
+
+void DisplayAirportNames(string AirportNames[])
+{
+	cout << left << setw(20) << "Choice #"
+		<< left << setw(20) << "Airport Names" << endl;
+
+	for (auto i = 0; i < 10; i++)
+	{
+		cout << left << setw(20) << i + 1
+			<< left << setw(20) << AirportNames[i] << endl;
+
+	}
+}
+void Passenger::PassengerBooking()
+{
+	string AirportNames[] = { "Islamabad North", "Islamabd South", "Lahore North",
+						"Lahore South", "Quetta North", "Quetta South",
+						"Peshawar North", "Peshawar South", "Karachi North",
+						"Karachi South" };
+	DisplayAirportNames(AirportNames);
+	cout << endl;
+	cout << "Please Enter the airport you will be departing from "; int choice(0); cin >> choice;
+	int cityIndex(0); int airportIndex(0);
+	for (auto i = 0; i < 5; i++)
+	{
+		for (auto k = 0; k < 2; k++)
+		{
+			if (city_ptr[i].getAirport()[k].getName() == AirportNames[choice - 1])
+			{
+				cityIndex = i; airportIndex = k;
+			}
+		}
+	}
+	char Charchoice = 'N';
+	PrintOnlyOneCitySchedule(city_ptr, cityIndex, airportIndex);
+	do
+	{
+		cout << "Please Enter the flight you want to pick "; int choice1(0); cin >> choice1;
+		cout << endl;
+
+		if (city_ptr[cityIndex].getAirport()[airportIndex].getFlightSchedule()[choice1 - 1].getisLocal() == 0)
+		{
+			if (VisaStatus == 1)
+			{
+				flights[howManyflightsBooked] = city_ptr[cityIndex].getAirport()[airportIndex].getFlightSchedule()[choice1 - 1];
+				howManyflightsBooked++;
+				cout << "Do you wish to pick other flight? Y/N? "; cin >> Charchoice;
+			}
+			else
+			{
+				cout << "You need a visa to book this flight" << endl;
+				cout << "Do you wish to pick other flight? Y/N? "; cin >> Charchoice;
+			}
+		}
+		else
+		{
+			flights[howManyflightsBooked] = city_ptr[cityIndex].getAirport()[airportIndex].getFlightSchedule()[choice1 - 1];
+			howManyflightsBooked++;
+			cout << "Do you wish to pick other flight? Y/N? "; cin >> Charchoice;
+
+		}
+	} while (Charchoice == 'Y' || Charchoice == 'y');
+
+
+
 }
