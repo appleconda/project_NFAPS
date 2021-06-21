@@ -15,7 +15,7 @@ class Admin : public city
 	string password;
 public:
 	Admin() :name(""), username(""), password("") {}
-
-
+	void AdminGenerateData(Admin*);
+	bool AdminVerification(Admin*, string Username, string Password);
 };
 

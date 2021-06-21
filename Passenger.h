@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
+
 #include "city.h"
 
 using namespace std;
@@ -18,26 +20,26 @@ class Passenger : public city
 	string passenger_password;
 	bool VisaStatus;
 	int howManyflightsBooked;
-	FlightSchedule* flights;
+	vector<FlightSchedule> flights;
 	FlightSchedule CurrentBooking;
-	city* city_ptr;
+
 public:
 	Passenger() : name(""), CNIC(0), passenger_username(""), passenger_password(""),
-		VisaStatus(0), howManyflightsBooked(0), city_ptr(0)
-	{
-		flights = new FlightSchedule[10];
-	}
-	~Passenger() { delete[] flights; }
-	void Passenger_registration(Passenger*);
+		VisaStatus(0), howManyflightsBooked(0) {}
+	~Passenger() {}
+
+	void Passenger_registration(Passenger*, int&);
 	void generateData(Passenger*, city*);
 
-	void setciy_ptr(city* city_ptr) { this->city_ptr = city_ptr; }
+	//void setciy_ptr(city* city_ptr) { this->city_ptr = city_ptr; }
 	void setName(string name) { this->name = name; }
 	void setCNIC(long long cnic) { CNIC = cnic; }
 	void setUserName(string str) { passenger_username = str; }
 	void setPassword(string str) { passenger_password = str; }
 	long long getCNIC() { return CNIC; }
 
-	void PassengerBooking();
+	void PrintFlightSchedule();
+	void PassengerBooking(city*);
+	void PassengerLogIn(city*, Passenger*, int);
 };
 
